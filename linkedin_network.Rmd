@@ -1,0 +1,135 @@
+---
+title: "Linkedin_Network"
+author: "Adityo_DasGupta"
+date: "2023-03-14"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Network Analysis on Linkedin
+
+LinkedIn enables individuals to create valuable professional connections within their industry, highlight their skills and expertise, and explore career prospects. As we delve into my personal network on LinkedIn, we'll examine the companies with whom I have connected the most and uncover potential future opportunities.
+
+
+### Top 15 Companies in a table
+```{r top table}
+# Import CSV
+connections = read.csv("/Users/adityodasgupta/Downloads/Connections.csv")
+attach(connections)
+
+
+# Create a table with 
+connections$name =  paste(connections$First.Name, substr(connections$Last.Name, start = 1, stop = 1), sep = " ")
+
+connections = connections[, c("name", "Company","Position", "Connected.On")]
+
+# create a frequency table
+freq_table = table(connections$Company)
+freq_table = sort(freq_table, decreasing = TRUE)
+top10= head(freq_table, n = 10)
+
+
+# Display the list as a table
+knitr::kable(top10, col.names = c("Company", "Connections"))
+
+```
+
+### Top 10 Companies in a graph
+```{r top 15 graph}
+# create a bar chart of the frequency table
+barplot(top10, main = "Top 10 Connections on Linkedin", 
+         ylab = "Number of Connections",
+        col = "green", las = 2, cex.names = 0.8)
+
+```
+
+### Creating nodes
+I am incorporating the companies my contacts are affiliated with as part of the nodes in my representation.
+```{r nodes}
+######### Creating nodes
+
+library(tidyverse)
+
+people <- connections %>%
+  distinct(name) %>%
+  rename(label = name)
+
+companies <- connections %>%
+  distinct(Company) %>%
+  rename(label = Company)
+
+nodes <- full_join(people, companies, by = "label")
+nodes <- rowid_to_column(nodes, "id")
+head(nodes)
+```
+
+
+### Creating edges
+The edges represent the relationship between the people and the companies.
+```{r edges}
+#### Creating edges
+
+edges <- connections[, c("name", "Company")]
+
+edges <- edges %>% 
+  left_join(nodes, by = c("name" = "label")) %>% 
+  rename(from = id)
+
+edges <- edges %>% 
+  left_join(nodes, by = c("Company" = "label")) %>% 
+  rename(to = id)
+
+edges <- unique(select(edges, from, to))
+head(edges)
+```
+
+
+### Graph with network library
+It is evident that approximately four companies have the highest number of connections, but the specifics of each are not readily visible.
+```{r network}
+## Building network
+library(network)
+
+routes_network <- network(edges,
+                          vertex.attr = nodes,
+                          matrix.type = "edgelist",
+                          ignore.eval = FALSE)
+plot(routes_network, vertex.cex = 1)
+```
+
+
+### Graph with igraph
+I utilized igraph to display both the names of companies and individuals, but the sheer volume of connections makes it challenging to discern the details.
+
+```{r igrpah}
+## igraph
+
+library(igraph)
+routes_igraph <- graph_from_data_frame(d = edges,
+                                       vertices = nodes,
+                                       directed = TRUE)
+
+plot(routes_igraph,
+     vertex.size = 3,
+     vertex.label.cex = 0.2,
+     edge.arrow.size = 0.01)
+```
+
+### Graph with visnetwork library
+The implementation of the visnetwork library facilitates the exploration of connections and enables clearer visualization of the companies with the highest number of connections.
+
+```{r visnetwork}
+## visNetwork
+
+
+library(visNetwork)
+library(networkD3)
+visNetwork(nodes, edges)
+```
+
+
