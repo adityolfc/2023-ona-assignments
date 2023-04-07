@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 # Excercise #2
-For this exercise we are investigating the idea of centrality in networks. We will look at what seat or position that we should sit on for the bus ride to Fakebook from downtown San Francisco! We can network with the people in our immediate area but not outside of that.
+The objective of this task is to explore the concept of centrality within networks, specifically in the context of determining the optimal seat or location to occupy during a bus trip from downtown San Francisco to Fakebook. Our ability to connect with other individuals is limited to those within our immediate vicinity and not extend beyond that.
 
 ## 1. Context & Modeling
 

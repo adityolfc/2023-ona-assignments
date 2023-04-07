@@ -1,0 +1,138 @@
+---
+title: "Fakebook"
+author: "Adityo_DasGupta"
+date: "2023-03-21"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Fakebook networking task
+
+The objective of this task is to explore the concept of centrality within networks, specifically in the context of determining the optimal seat or location to occupy during a bus trip from downtown San Francisco to Fakebook. Our ability to connect with other individuals is limited to those within our immediate vicinity and not extend beyond that.
+
+
+### Visualise the grid with all possible seats
+```{r top table}
+library(gt)
+library(gtExtras)
+library(visNetwork)
+library(networkD3)
+library(ggplot2)
+library(dplyr)
+library(cluster)
+library(tidyverse)
+library(igraph)
+library(tidygraph)
+
+bus <- data.frame(
+  col = rep(c(1:4),times=6), 
+  row = rep(c(1:6),each=4),
+  passenger=rep('Available',4*6))
+  
+
+bus$passenger[bus$row != 5 & bus$col == 1] <- 'NA'
+bus$passenger[(bus$row != 5 & bus$col == 4)] <- 'NA'
+bus$passenger[(bus$row < 4 & bus$col > 2)] <- 'NA'
+bus$passenger[(bus$row == 6 & bus$col > 2)] <- 'NA'
+
+
+bus$passenger[(bus$row <3 | bus$row >5) & bus$passenger == 'Available' ] <- 'taken'
+bus$passenger[bus$col <2 & bus$passenger == 'Available' ] <- 'taken'
+bus$passenger[bus$col >2 & bus$passenger == 'Available' & bus$row >4 ] <- 'taken'
+
+
+ggplot(data=bus,aes(x=row,y=col))+
+  geom_point(aes(color = passenger),size=5)+
+  labs(title="Grid of Bus no modification")
+```
+
+### Visualise the grid with only the seats under contention
+```{r top 15 graph}
+bus=bus[c(bus$passenger!='NA'),]
+bus1=rowid_to_column(bus, "id")
+
+ggplot(data=bus1,aes(x=row,y=col,color=passenger,label=id))+
+  geom_point(size=10)+
+  geom_text(hjust=.5, vjust=0.5,color="white")+
+  labs(title="Grid of Bus with seats under contention")
+
+
+```
+
+### Get all distances between nodes and keep only which are feasible
+
+```{r nodes}
+distances <- daisy(bus1[,c('row','col')], metric = "euclidean")
+distances=as.data.frame(as.matrix(distances))
+
+
+distances=cbind(bus1,distances)
+
+#pivot to make into tabular form
+distances <- distances %>% 
+  pivot_longer(where(is.numeric) & (!contains(c("id","row","col"))),names_to = "to_seat_id")
+
+#quick change the name of value to distance
+distances <- distances %>%
+  rename("Distance" = "value")
+
+
+distances=distances[distances$Distance<=sqrt(2),]
+
+distances%>%
+  gt() 
+```
+
+
+### Visualise the network map
+
+```{r edges}
+final=distances[,c('id','to_seat_id')]
+
+final=final[final$id!=final$to_seat_id,]
+final$to_seat_id=as.numeric(final$to_seat_id)
+
+unique_combinations <- t(apply(final, 1, function(id) sort(id)))
+unique_combinations <- unique(unique_combinations)
+
+final_1=data.frame(unique_combinations)
+
+graph <- graph_from_data_frame(final_1, directed=FALSE)
+
+plot(graph, layout=layout.fruchterman.reingold,
+     vertex.size = 10,
+     vertex.label = V(graph)$name,
+     vertex.label.cex = 0.8,
+     vertex.label.dist = 1.5,
+     vertex.label.color = "black",
+     vertex.color = "green")
+
+```
+
+
+### Get the centralities
+
+```{r network}
+betweeness_centrality <- betweenness(graph)
+
+
+degree_centrality <- degree(graph)
+
+
+closeness_centrality <- closeness(graph)
+
+output=cbind(data.frame(betweeness_centrality),data.frame(degree_centrality),data.frame(closeness_centrality))
+output_1=rowid_to_column(output, "id")
+output_1%>%
+  gt() 
+```
+
+
+### We observe that the node with ID=7 which is seat 'D' in the original problem is best possible seat
+
+
