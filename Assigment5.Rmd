@@ -1,0 +1,39 @@
+---
+title: "Assignment 5"
+author: "Adityo Das Gupta"
+date: "2023-04-09"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Contagion is a well-established concept in the field of social psychology and refers to the spread of behavior or information from one individual to another. However, not all contagion is the same, and there are important differences between simple and complex contagion. Complex contagions require social affirmation from multiple sources. Examples include the spread of high-risk social movements, avant-garde fashions, and unproven technologies. Results show that as adoption thresholds increase, long ties can impede diffusion. Complex contagions depend primarily on the width of the bridges across a network, not just their length. Wide bridges are a characteristic feature of many spatial networks, which may account in part for the widely observed tendency for social movements to diffuse spatially.
+
+Simple contagion occurs when an individual is exposed to a behavior or idea and adopts it with a single exposure. Examples of simple contagion include fads, rumors, and viruses. In contrast, complex contagion occurs when an individual is influenced by multiple exposures to a behavior or idea, as well as the behavior and influence of others in their social network. This means that the adoption of a behavior or idea is influenced not only by the behavior or idea itself but also by the social context and the behavior of others in the network. Complex contagions are considered to be more realistic/pragmatic than simplex contagions since you need to be exposed to the contagion more than once to be disseminated.
+
+![Simple Contagion](/Users/adityodasgupta/Documents/McGill/ORGB/Picture1.png)
+
+![Complex Contagion spread across the population](/Users/adityodasgupta/Documents/McGill/ORGB/Compl.png)
+
+![Complex Contagion restricted withtin the population](/Users/adityodasgupta/Documents/McGill/ORGB/com.png)
+
+In an organizational context, complex contagion means that the diffusion of behaviors or ideas is influenced by multiple factors, such as the norms, values, and beliefs of the organization, as well as the behavior and influence of coworkers, managers, and other influential individuals. This can lead to more complex patterns of behavior diffusion, where some behaviors or ideas may spread quickly through the organization, while others may be more difficult to adopt. For example, introducing a new communication tool may require multiple exposures and the support of key influencers in the organization to be widely adopted.
+
+Threshold models are a useful framework for understanding and managing complex contagion in organizations. In threshold models, individuals have a certain threshold or level of influence required to adopt a behavior or idea. This means that individuals with a higher threshold are less likely to adopt a behavior or idea, while those with a lower threshold are more likely to adopt it. Threshold models can provide insights into how complex contagion spreads through an organization and identify the key factors that influence the adoption of a behavior or idea. By understanding these factors, organizations can develop strategies to promote the adoption of desirable behaviors and mitigate the spread of undesirable ones.
+
+![Threshold model at 25% contagion](/Users/adityodasgupta/Documents/McGill/ORGB/asas.png)
+
+![Threshold model at 50% contagion](/Users/adityodasgupta/Documents/McGill/ORGB/xasx.png)
+
+Prosocial behavior is behavior that benefits others or the group as a whole, and it can be encouraged and managed through threshold models in organizations. For example, an organization can identify key influencers who have a low threshold for prosocial behavior and encourage them to spread these behaviors throughout the organization. Additionally, the organization can create a supportive social context that encourages prosocial behavior by rewarding and recognizing individuals who engage in these behaviors.
+
+Learning is also influenced by complex contagion in organizations. Threshold models can be used to manage learning by identifying individuals who have a low threshold for learning and providing them with opportunities for professional development and growth. By encouraging these individuals to share their knowledge and skills with others in the organization, learning can be diffused more effectively.
+
+Toxic or unproductive behaviors can also be managed through threshold models in organizations. By identifying individuals who have a high threshold for these behaviors and intervening early, the organization can prevent the spread of these behaviors to others in the network. Additionally, the organization can create a social context that discourages these behaviors by clearly communicating expectations and consequences for engaging in them.
+
+In conclusion, complex contagion is an important concept that influences the diffusion of behaviors and ideas in organizations. Understanding the differences between simple and complex contagion, and using threshold models to manage prosocial behavior, learning, and toxic or unproductive behaviors can help organizations to create a more positive and productive workplace culture.
+
+
+
